@@ -1,49 +1,27 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-
+using UnityEngine.PlayerLoop;
 
 public class Spawn : MonoBehaviour
 {
-    [SerializeField] private List<Cube> _explousionObject;
+    [SerializeField] private ExplosiveObject _prefab;
+    [SerializeField] private Explosion _spownExplosion;
+    [SerializeField] private Camera _camera;
 
-    private void OnEnable()
+    private Ray _ray;
+
+    private void Update()
     {
-        foreach (var item in _explousionObject)
+        _ray = _camera.ScreenPointToRay(Input.mousePosition);
+
+        if (Input.GetMouseButtonDown(0) && Physics.Raycast(_ray, out RaycastHit hit, Mathf.Infinity))
         {
-            item.CubeDestroid += Explosion;
-        }
-    }
-
-    private void Explosion(Cube cube)
-    {
-        cube.CubeDestroid -= Explosion;
-        CalculationSpawn(cube);
-    }
-
-    private void CalculationSpawn(Cube cube)
-    {
-        int randomValue = Random.Range(1, 100);
-
-        if (randomValue < cube.Procent)
-        {
-            int procent = cube.Procent /= 2;
-            cube.transform.localScale *= 0.5f;
-            int quantity = Random.Range(1, 6);
-
-            for (int i = 1; i <= quantity; i++)
+            if (hit.transform.TryGetComponent(out ExplosiveObject entityExcption))
             {
-                SpawnCube(cube, procent);
+                _spownExplosion.Calculation(entityExcption);
             }
         }
     }
-
-    private void SpawnCube (Cube cube, int procent)
-    {
-        Cube ObjectCube = Instantiate(cube);
-        ObjectCube.transform.position += Random.insideUnitSphere * 0.1f;
-        ObjectCube.Procent = procent;
-        ObjectCube.CubeDestroid += Explosion;
-    }
 }
-
-
