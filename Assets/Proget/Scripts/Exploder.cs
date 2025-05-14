@@ -4,10 +4,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
-public class Spawn : MonoBehaviour
+public class Exploder : MonoBehaviour
 {
     [SerializeField] private ExplosiveObject _prefab;
-    [SerializeField] private Explosion _spownExplosion;
+    [SerializeField] private ExplosiveFragmentSpawner _spownExplosion;
     [SerializeField] private Camera _camera;
 
     private Ray _ray;
@@ -20,7 +20,7 @@ public class Spawn : MonoBehaviour
         {
             if (hit.transform.TryGetComponent(out ExplosiveObject entityExcption))
             {
-                _spownExplosion.Calculation(entityExcption);
+                _spownExplosion.Split(entityExcption);
             }
         }
     }

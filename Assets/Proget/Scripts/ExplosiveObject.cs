@@ -29,14 +29,11 @@ public class ExplosiveObject : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void SetProcent(int procentPerent)
+    public void SetValue(int procentPerent)
     {
         procentPerent /= _dividerProcent;
         Procent = procentPerent;
-    }
 
-    public void SetScale()
-    {
-        this.transform.localScale /= _dividerScale;
+        transform.localScale /= _dividerScale;
     }
 }

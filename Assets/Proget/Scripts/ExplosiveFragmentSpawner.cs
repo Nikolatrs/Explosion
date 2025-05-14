@@ -3,30 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class Explosion : MonoBehaviour
+public class ExplosiveFragmentSpawner : MonoBehaviour
 {
-    public void Calculation(ExplosiveObject recastObject)
+    private int _minQuantity = 2;
+    private int _maxQuantity = 6;
+
+    public void Split(ExplosiveObject recastObject)
     {
 
-        int randomQuantity = Random.Range(2, 6);
+        int randomQuantity = Random.Range(_minQuantity, _maxQuantity+1);
         int randomProcent = Random.Range(0, 100);
 
         if (randomProcent < recastObject.Procent)
         {
             for (int i = 0; i < randomQuantity; i++)
             {
-                Create(recastObject);
+                SpawnFragment(recastObject);
             }
         }
 
        recastObject.DestroyObject();
     }
 
-    private void Create(ExplosiveObject recastObject)
+    private void SpawnFragment(ExplosiveObject recastObject)
     {
         var cubeInst = Instantiate(recastObject, recastObject.transform.position, recastObject.transform.rotation);
         cubeInst.transform.position += Random.insideUnitSphere * 0.1f;
-        cubeInst.SetProcent(recastObject.Procent);
-        cubeInst.SetScale();
+        cubeInst.SetValue(recastObject.Procent);
     }
 }
