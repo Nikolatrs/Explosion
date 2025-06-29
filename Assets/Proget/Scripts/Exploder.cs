@@ -17,11 +17,8 @@ public class Exploder : MonoBehaviour
         _ray = _camera.ScreenPointToRay(Input.mousePosition);
 
         if (Input.GetMouseButtonDown(0) && Physics.Raycast(_ray, out RaycastHit hit, Mathf.Infinity))
-        {
             if (hit.transform.TryGetComponent(out ExplosiveObject entityExcption))
-            {
                 _spownExplosion.Split(entityExcption);
-            }
-        }
+
     }
 }
