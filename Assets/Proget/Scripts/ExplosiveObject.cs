@@ -7,16 +7,13 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(Renderer))]
 public class ExplosiveObject : MonoBehaviour
 {
-    [SerializeField] private float _explosionRadius;
-    [SerializeField] private float _explosionForse;
 
     private Rigidbody _rigidbody;
     private Renderer _renderer;
-    private int _dividerProcent = 2;
-    private int _dividerScale = 2;
 
-    private int _factor = 2;
-
+    public int Factor { get; private set; } = 2;
+    public float ExplosionRadius { get; private set; } = 10;
+    public float ExplosionForse { get; private set; } = 300;
     public int Procent { get; private set; } = 100;
 
     private void Awake()
@@ -30,28 +27,13 @@ public class ExplosiveObject : MonoBehaviour
         _renderer.material.color = Random.ColorHSV();
     }
 
-    public void DestroyObject()
+    public void SetValue(int factor)
     {
-        Destroy(gameObject);
+        Procent /= factor;
+        transform.localScale /= factor;
+        ExplosionRadius *= factor;
+        ExplosionForse *= factor;
+
+        Factor = factor * 2;
     }
-
-    public void SetValue(int procentPerent)
-    {
-        procentPerent /= _dividerProcent;
-        Procent = procentPerent;
-        transform.localScale /= _dividerScale;
-
-        _explosionRadius *= _factor;
-        _explosionForse *= _factor;
-    }
-
-    public void PushingFpragment()
-    {
-        Collider[] fragments = Physics.OverlapSphere(transform.position, _explosionRadius);
-
-        foreach (var fragment in fragments)
-            if (fragment.attachedRigidbody != null)
-                fragment.attachedRigidbody.AddExplosionForce(_explosionForse, transform.position, _explosionRadius);
-    }
-
 }
