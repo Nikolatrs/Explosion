@@ -1,41 +1,14 @@
-using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public class Exploder : MonoBehaviour
 {
-    [SerializeField] private ExplosiveObject _prefab;
-    [SerializeField] private ExplosiveFragmentSpawner _explosiveFragmentSpawner;
-    [SerializeField] private Camera _camera;
-    [SerializeField] private InputManager _inputManager;
-    
-
-    private Ray _ray;
-
-    private void OnEnable()
+    public void PushingFpragment(ExplosiveObject recastObject, float radius, float forse)
     {
-        _inputManager.LeftClicK += _inputManager_LeftClicK;
+        Vector3 objectPosition = recastObject.transform.position;
+        Collider[] fragments = Physics.OverlapSphere(objectPosition, recastObject.ExplosionRadius);
+
+        foreach (var fragment in fragments)
+            if (fragment.attachedRigidbody != null)
+                fragment.attachedRigidbody.AddExplosionForce(recastObject.ExplosionForse, objectPosition, recastObject.ExplosionRadius);
     }
-
-    private void OnDisable()
-    {
-        _inputManager.LeftClicK -= _inputManager_LeftClicK;
-    }
-
-    private void _inputManager_LeftClicK()
-    {
-        _ray = _camera.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(_ray, out RaycastHit hit, Mathf.Infinity))
-            if (hit.transform.TryGetComponent(out ExplosiveObject entityExcption))
-            {
-                _explosiveFragmentSpawner.Split(entityExcption);
-
-                Destroy(entityExcption.gameObject);
-            }
-    }
-
-
 }
