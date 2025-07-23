@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Exploder : MonoBehaviour
 {
-    public void PushingFpragment(ExplosiveObject recastObject, float radius, float forse)
+    public void PushingFpragment(ExplosiveObject recastObject)
     {
         Vector3 objectPosition = recastObject.transform.position;
         Collider[] fragments = Physics.OverlapSphere(objectPosition, recastObject.ExplosionRadius);
@@ -11,4 +11,6 @@ public class Exploder : MonoBehaviour
             if (fragment.attachedRigidbody != null)
                 fragment.attachedRigidbody.AddExplosionForce(recastObject.ExplosionForse, objectPosition, recastObject.ExplosionRadius);
     }
+
+
 }

@@ -7,8 +7,6 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(Renderer))]
 public class ExplosiveObject : MonoBehaviour
 {
-
-    private Rigidbody _rigidbody;
     private Renderer _renderer;
 
     public int Factor { get; private set; } = 2;
@@ -18,7 +16,6 @@ public class ExplosiveObject : MonoBehaviour
 
     private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
         _renderer = GetComponent<Renderer>();
     }
 
@@ -33,7 +30,6 @@ public class ExplosiveObject : MonoBehaviour
         transform.localScale /= factor;
         ExplosionRadius *= factor;
         ExplosionForse *= factor;
-
         Factor = factor * 2;
     }
 }
