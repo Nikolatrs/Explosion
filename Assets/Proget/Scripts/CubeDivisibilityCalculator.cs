@@ -9,14 +9,11 @@ public class CubeDivisibilityCalculator : MonoBehaviour
     [SerializeField] private Spawner _spowner;
     [SerializeField] private Exploder _exploder;
     [SerializeField] private Raycaster _raycaster;
-    private int _minQuantity = 2;
-    private int _maxQuantity = 6;
 
-        private void OnEnable()
+    private void OnEnable()
     {
         _raycaster.HitObject += RaycasterHitObject;
     }
-
 
     private void OnDisable()
     {
@@ -29,14 +26,12 @@ public class CubeDivisibilityCalculator : MonoBehaviour
 
         if (randomProcent < cube.Procent)
         {
-                _spowner.SpawnFragment(cube);
-
+            _spowner.SpawnFragment(cube);
         }
         else
         {
-            _exploder.PushingFpragment(cube);
+            _exploder.PushingFpragment(_exploder.GetFragnent(cube), cube);
         }
-            _spowner.DestroyObgect(cube);
+        _spowner.DestroyObgect(cube);
     }
-
 }
