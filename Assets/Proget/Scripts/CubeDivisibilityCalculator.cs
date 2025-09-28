@@ -26,12 +26,13 @@ public class CubeDivisibilityCalculator : MonoBehaviour
 
         if (randomProcent < cube.Procent)
         {
-            _spowner.SpawnFragment(cube);
+            _spowner.CreationFragment(cube);
         }
         else
         {
-            _exploder.PushingFpragment(_exploder.GetFragnent(cube), cube);
+            _exploder.PushingFpragment(cube);
         }
+
         _spowner.DestroyObgect(cube);
     }
 }

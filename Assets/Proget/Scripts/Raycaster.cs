@@ -19,13 +19,15 @@ public class Raycaster : MonoBehaviour
 
     private void LeftClicked()
     {
-        RaycastHit hit;
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+        {
+
             if (hit.transform.TryGetComponent(out ExplosiveObject entityExcption))
             {
                 HitObject?.Invoke(entityExcption);
             }
+        }
     }
 }

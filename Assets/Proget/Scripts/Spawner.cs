@@ -4,54 +4,45 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private Exploder _exploder;
     private int _minQuantity = 2;
     private int _maxQuantity = 6;
-    private int divider = 4;
+    private int _scaleFactor = 2;
 
-    private Vector3 CalculatePositionBox(ExplosiveObject recastObject)
-    {
-        Vector3 position = ColculatePositon(recastObject);
-        bool isPositionOccupied = Physics.CheckBox(position, recastObject.transform.lossyScale);
-
-        while (!isPositionOccupied)
-        {
-            position = ColculatePositon(recastObject);
-            isPositionOccupied = Physics.CheckBox(position, recastObject.transform.lossyScale);
-        }
-
-        return position;
-    }
-
-    public void SpawnFragment(ExplosiveObject recastObject)
+    public void CreationFragment(ExplosiveObject recastObject)
     {
         int quantity = Random.Range(_minQuantity, _maxQuantity);
-        List<Rigidbody> cubes = new();
+        List<Vector3> shiftVectors = new List<Vector3>(8)
+        {
+            new Vector3(-0.5f, -0.5f, 0.5f),
+            new Vector3(0.5f, -0.5f, 0.5f),
+            new Vector3(0.5f, -0.5f, -0.5f),
+            new Vector3(-0.5f, -0.5f, -0.5f),
+            new Vector3(-0.5f, 0.5f, 0.5f),
+            new Vector3(0.5f, 0.5f, 0.5f),
+            new Vector3(0.5f, 0.5f, -0.5f),
+            new Vector3(-0.5f, 0.5f, -0.5f)
+        };
+
+        List<Rigidbody> listCubes = new();
 
         for (int i = 0; i < quantity; i++)
         {
-            var position = CalculatePositionBox(recastObject);
-            var cubeInst = Instantiate(recastObject, position, recastObject.transform.rotation);
-            cubeInst.SetValue(recastObject.Factor);
-            cubes.Add(cubeInst.GetComponent<Rigidbody>());
+            Vector3 shirt = shiftVectors[Random.Range(0, shiftVectors.Count - 1)];
+            Vector3 positionCube = recastObject.transform.position + ((shirt) * (recastObject.transform.localScale.x / _scaleFactor));
+            shiftVectors.Remove(shirt);
+            var cubeInst = Instantiate(recastObject, positionCube, recastObject.transform.rotation);
+            cubeInst.SetValue();
+            listCubes.Add(cubeInst.GetComponent<Rigidbody>());
         }
 
-        _exploder.PushingFpragment(cubes, recastObject);
+        foreach (var fragment in listCubes)
+            fragment.AddExplosionForce(recastObject.ExplosionForse, recastObject.transform.position, recastObject.ExplosionRadius);
+
         DestroyObgect(recastObject);
     }
 
     public void DestroyObgect(ExplosiveObject recastObject)
     {
         Destroy(recastObject.gameObject);
-    }
-
-    private Vector3 ColculatePositon(ExplosiveObject recastObject)
-    {
-        Vector3 position = recastObject.transform.position + Random.insideUnitSphere * recastObject.transform.localScale.x;
-
-        while (position.y < recastObject.transform.localScale.x / divider)
-            position = recastObject.transform.position + Random.insideUnitSphere * recastObject.transform.localScale.x;
-
-        return position;
     }
 }

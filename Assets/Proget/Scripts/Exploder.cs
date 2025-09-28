@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class Exploder : MonoBehaviour
 {
-    public void PushingFpragment(List<Rigidbody> fragments, ExplosiveObject recastObject)
+    public void PushingFpragment(ExplosiveObject recastObject)
     {
-        foreach (var fragment in fragments)
+        foreach (var fragment in GetFragnent(recastObject))
             fragment.AddExplosionForce(recastObject.ExplosionForse, recastObject.transform.position, recastObject.ExplosionRadius);
     }
 
